@@ -31,8 +31,7 @@ type Options struct {
 	MaxConnections             int    `json:"maxConnections,omitempty" yaml:"maxConnections" description:"Maximum connections allowed to connect to Jenkins"`
 	DevOpsServiceAddress       string `json:"devopsServiceAddress" yaml:"devopsServiceAddress" description:"The separate DevOps Service address"`
 	DevOpsPluginServiceAddress string `json:"devopsPluginServiceAddress" yaml:"devopsPluginServiceAddress" description:"The KubeSphere DevOps plugin Service address"`
-	// K8sBearerToken does not take input from outside
-	K8sBearerToken string
+	K8sBearerToken             string `json:"k8sBearerToken" yaml:"k8sBearerToken" description:"K8s bearer token does not take input from outside'"`
 }
 
 // NewDevopsOptions returns a `zero` instance

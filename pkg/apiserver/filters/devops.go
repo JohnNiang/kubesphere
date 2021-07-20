@@ -33,8 +33,9 @@ import (
 
 // WithDevOpsAPIServer proxy request to DevOps service if requests path has the APIGroup with devops.kubesphere.io
 func WithDevOpsAPIServer(handler http.Handler, config *jenkins.Options, failed proxy.ErrorResponder) http.Handler {
-	if config.DevOpsServiceAddress == "" || config.K8sBearerToken == "" {
-		klog.V(6).Info("The DevOps service address or k8s token is empty, the proxy of DevOps server was not enabled")
+	if config.DevOpsServiceAddress == "" || config.DevOpsPluginServiceAddress == "" || config.K8sBearerToken == "" {
+		klog.V(6).Info("The DevOps service address, devops plugin service address or k8s token is empty," +
+			" the proxy of DevOps server was not enabled")
 		// this filter rely on a separate DevOps address
 		// do not pass the proxy if there's no service address
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -52,7 +53,7 @@ func WithDevOpsAPIServer(handler http.Handler, config *jenkins.Options, failed p
 
 		if info.APIGroup == "devops.kubesphere.io" {
 			serverAsProxy(w, req, config.DevOpsServiceAddress, config.K8sBearerToken)
-		} else  if info.APIGroup == "tenant.kubesphere.io" && info.Resource == "devops" {
+		} else if info.APIGroup == "tenant.kubesphere.io" && info.Resource == "devops" {
 			serverAsProxy(w, req, config.DevOpsPluginServiceAddress, config.K8sBearerToken)
 		} else {
 			handler.ServeHTTP(w, req)
